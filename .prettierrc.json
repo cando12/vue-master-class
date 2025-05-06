@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json.schemastore.org/prettierrc",
+  "semi": false,
+  "singleQuote": true,
+  "printWidth": 80,
+  "tabWidth": 2,
+  "useTabs": false,
+  "trailingComma": "none",
+  "bracketSpacing": true,
+  "arrowParens": "avoid",
+  "vueIndentScriptAndStyle": true,
+  "htmlWhitespaceSensitivity": "css",
+  "vueSingleFileComponentIndent": true,
+  "attributeSorting": true,
+  "vueMaxAttributesPerLine": 1,
+  "vueHtmlSelfClosing": false,
+  "vueAttributeIndent": true,
+  "vueMaxLineLength": 80
+}
