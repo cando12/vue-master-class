@@ -6,15 +6,6 @@ import {
   useVueTable,
 } from '@tanstack/vue-table'
 
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
-
 const props = defineProps<{
   columns: ColumnDef<TData, TValue>[]
   data: TData[]

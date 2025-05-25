@@ -1,6 +1,4 @@
 <script setup lang="ts">
-  import SideBarLink from './SideBarLink.vue'
-  import { Button } from '@/components/ui/button'
 
   const links = [
     {
