@@ -14,6 +14,7 @@
 
 <template>
   <RouterLink
+    exact-active-class="bg-muted text-primary"
     v-for="link in links"
     :key="link.title"
     :to="link.to"
@@ -23,3 +24,4 @@
     <span class="hidden lg:block text-nowrap">{{ link.title }}</span>
   </RouterLink>
 </template>
+
