@@ -28,10 +28,14 @@ export default defineConfig({
     imports: [
       'vue',
       'vue-i18n',
-      VueRouterAutoImports
+      VueRouterAutoImports,
+      {
+        'pinia':['defineStore','storeToRefs','acceptHMRUpdate']
+      }
     ],
     dts:true,
-    viteOptimizeDeps:true
+    viteOptimizeDeps:true,
+    dirs:['src/stores']
   }),Components({
     dts:true,
     include: [
