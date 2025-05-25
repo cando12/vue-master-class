@@ -70,7 +70,8 @@ td{
   @apply p-0;
 }
 
-td > a {
+td > * {
   @apply block w-full;
+  @apply p-4
 }
 </style>
