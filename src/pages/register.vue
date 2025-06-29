@@ -98,6 +98,8 @@
 <script lang="ts" setup>
   import { register } from '@/utils/supaAuth'
 
+  const router = useRouter()
+
   const formData = ref({
     username: '',
     first_name: '',

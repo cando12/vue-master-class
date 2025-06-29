@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
   const links = [
     {
       to: '/',
@@ -29,7 +28,6 @@
       title: 'Settings'
     },
     {
-      to: '/signout',
       icon: 'lucide:log-out',
       title: 'Sign out'
     }
@@ -58,7 +56,10 @@
       </div>
 
       <div class="border-y text-center bg-background py-3">
-        <SideBarLink :links="accountLinks" />
+        <SideBarLink
+          :links="accountLinks"
+          @actionClicked="payload => console.log(payload)"
+        />
       </div>
     </nav>
   </aside>

@@ -1,9 +1,10 @@
 <script setup lang="ts">
+  const errorStore = useErrorStore()
+  onErrorCaptured(error => {
+    errorStore.setError({ error: error.message, customCode: 500 })
+  })
 
-const errorStore = useErrorStore()
-onErrorCaptured((error) => {
-  errorStore.setError({ error: error.message, customCode: 500 })
-})
+  onMounted(async () => {})
 </script>
 
 <template>
@@ -14,7 +15,9 @@ onErrorCaptured((error) => {
         <Component :is="Component" :key="route.name" />
         <template #fallback>
           <div class="flex items-center justify-center h-screen">
-            <div class="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
+            <div
+              class="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"
+            ></div>
           </div>
         </template>
       </Suspense>

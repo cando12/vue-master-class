@@ -36,3 +36,5 @@ export const taskQuery = (id:number)=> supabase.from('tasks').select(`
   )
 `).eq('id',id).single()
 export type Task = QueryData<ReturnType<typeof taskQuery>>
+
+export const profileQuery = (id:string)=> supabase.from('profiles').select('*').eq('id',id).single()
