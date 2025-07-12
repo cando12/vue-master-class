@@ -4,7 +4,9 @@
     errorStore.setError({ error: error.message, customCode: 500 })
   })
 
-  onMounted(async () => {})
+  onMounted(() => {
+    useAuthStore().trackAuthChanges()
+  })
 </script>
 
 <template>

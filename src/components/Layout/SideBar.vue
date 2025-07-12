@@ -32,6 +32,18 @@
       title: 'Sign out'
     }
   ]
+
+  const router = useRouter()
+
+  const executedAction = async (title: string) => {
+    if (title === 'Sign out') {
+      const { logout } = await import('@/utils/supaAuth')
+      const isLoggedOut = await logout()
+      if (isLoggedOut) {
+        router.push('/login')
+      }
+    }
+  }
 </script>
 
 <template>
@@ -56,10 +68,7 @@
       </div>
 
       <div class="border-y text-center bg-background py-3">
-        <SideBarLink
-          :links="accountLinks"
-          @actionClicked="payload => console.log(payload)"
-        />
+        <SideBarLink :links="accountLinks" @actionClicked="executedAction" />
       </div>
     </nav>
   </aside>
