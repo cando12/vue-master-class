@@ -19,7 +19,74 @@ const logStep = stepMessage => {
   console.log(stepMessage)
 }
 
-const seedProjects = async numEntries => {
+// Create test users first
+const createTestUsers = async () => {
+  logStep('Creating test users...')
+
+  const testUsers = [
+    {
+      email: 'user1@test.com',
+      password: 'password123',
+      username: 'user1',
+      full_name: 'Test User 1'
+    },
+    {
+      email: 'user2@test.com',
+      password: 'password123',
+      username: 'user2',
+      full_name: 'Test User 2'
+    },
+    {
+      email: 'user3@test.com',
+      password: 'password123',
+      username: 'user3',
+      full_name: 'Test User 3'
+    }
+  ]
+
+  const createdUserIds = []
+
+  for (const user of testUsers) {
+    // Create auth user
+    const { data: authData, error: authError } =
+      await supabase.auth.admin.createUser({
+        email: user.email,
+        password: user.password,
+        user_metadata: { name: user.full_name },
+        email_confirm: true
+      })
+
+    if (authError && authError.message !== 'User already registered') {
+      console.log(`Auth user creation error: ${authError.message}`)
+      continue
+    }
+
+    if (authData?.user?.id) {
+      // Create profile
+      const { error: profileError } = await supabase.from('profiles').upsert({
+        id: authData.user.id,
+        username: user.username,
+        full_name: user.full_name
+      })
+
+      if (profileError) {
+        console.log(`Profile creation error: ${profileError.message}`)
+      } else {
+        createdUserIds.push(authData.user.id)
+        console.log(
+          `Created user: ${user.username} with ID: ${authData.user.id}`
+        )
+      }
+    }
+  }
+
+  logStep(
+    `Test users created successfully. Created ${createdUserIds.length} users.`
+  )
+  return createdUserIds
+}
+
+const seedProjects = async (numEntries, userIds) => {
   logStep('Seeding projects...')
   const projects = []
 
@@ -31,7 +98,10 @@ const seedProjects = async numEntries => {
       slug: name.toLocaleLowerCase().replace(/ /g, '-'),
       description: faker.lorem.paragraph(2),
       status: faker.helpers.arrayElement(['in-progress', 'completed']),
-      collaborators: faker.helpers.arrayElements([1, 2, 3])
+      collaborators: faker.helpers.arrayElements(userIds, {
+        min: 1,
+        max: Math.min(3, userIds.length)
+      })
     })
   }
 
@@ -47,7 +117,7 @@ const seedProjects = async numEntries => {
   return data
 }
 
-const seedTasks = async (numEntries, projectsIds) => {
+const seedTasks = async (numEntries, projectsIds, userIds) => {
   logStep('Seeding tasks...')
   const tasks = []
 
@@ -57,8 +127,12 @@ const seedTasks = async (numEntries, projectsIds) => {
       status: faker.helpers.arrayElement(['in-progress', 'completed']),
       description: faker.lorem.paragraph(2),
       due_date: faker.date.future(),
+      profile_id: faker.helpers.arrayElement(userIds), // Add profile_id
       project_id: faker.helpers.arrayElement(projectsIds),
-      collaborators: faker.helpers.arrayElements([1, 2, 3])
+      collaborators: faker.helpers.arrayElements(userIds, {
+        min: 1,
+        max: Math.min(3, userIds.length)
+      })
     })
   }
 
@@ -75,10 +149,17 @@ const seedTasks = async (numEntries, projectsIds) => {
 }
 
 const seedDatabase = async numEntriesPerTable => {
-  const projectsIds = (await seedProjects(numEntriesPerTable)).map(
+  const userIds = await createTestUsers()
+
+  if (userIds.length === 0) {
+    console.error('No users were created. Cannot proceed with seeding.')
+    process.exit(1)
+  }
+
+  const projectsIds = (await seedProjects(numEntriesPerTable, userIds)).map(
     project => project.id
   )
-  await seedTasks(numEntriesPerTable, projectsIds)
+  await seedTasks(numEntriesPerTable, projectsIds, userIds)
 }
 
 const numEntriesPerTable = 10
