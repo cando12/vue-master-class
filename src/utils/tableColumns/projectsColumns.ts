@@ -6,6 +6,7 @@ import type { GroupedCollabs } from '@/types/GroupedCollabs'
 import Avatar from '@/components/ui/avatar/Avatar.vue'
 import AvatarImage from '@/components/ui/avatar/AvatarImage.vue'
 import AvatarFallback from '@/components/ui/avatar/AvatarFallback.vue'
+import AppInPlaceStatus from '@/components/AppInplaceEditText/AppInPlaceStatus.vue'
 
 export const columns = (
   collabs: Ref<GroupedCollabs>
@@ -31,7 +32,7 @@ export const columns = (
       return h(
         'div',
         { class: 'text-left font-medium' },
-        row.getValue('status')
+        h(AppInPlaceStatus, { modelValue: row.original.status })
       )
     }
   },
@@ -41,19 +42,25 @@ export const columns = (
     cell: ({ row }) => {
       return h(
         'div',
-        { class: 'text-left font-medium' },
+        { class: 'text-left font-medium flex items-center gap-1' },
         collabs.value[row.original.id]
-          ? collabs.value[row.original.id].map((collab) => {
+          ? collabs.value[row.original.id].map((collab, index) => {
               return h(RouterLink, { to: `/users/${collab.username}` }, () => {
                 return h(
                   Avatar,
-                  { class: 'hover:scale-110 transition-transform' },
+                  {
+                    class: 'hover:scale-110 transition-transform',
+                    style: { zIndex: collabs.value[row.original.id].length - index }
+                  },
                   () => h(AvatarImage, { src: collab.avatar_url || '' })
                 )
               })
             })
-          : row.original.collaborators.map(() => {
-              return h(Avatar, { class: 'animate-pulse' }, () =>
+          : row.original.collaborators.map((_, index) => {
+              return h(Avatar, {
+                class: 'animate-pulse',
+                style: { zIndex: row.original.collaborators.length - index }
+              }, () =>
                 h(AvatarFallback)
               )
             })
