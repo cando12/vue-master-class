@@ -32,7 +32,7 @@ export const columns = (
       return h(
         'div',
         { class: 'text-left font-medium' },
-        h(AppInPlaceStatus, { modelValue: row.original.status })
+        h(AppInPlaceStatus, { modelValue: row.original.status,readOnly:true })
       )
     }
   },

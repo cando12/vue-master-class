@@ -36,7 +36,7 @@
     <TableRow>
       <TableHead> Status </TableHead>
       <TableCell>
-        <AppInPlaceStatus v-model="project.status" />
+        <AppInPlaceStatus v-model="project.status" @commit="updateProject" />
       </TableCell>
     </TableRow>
     <TableRow>
