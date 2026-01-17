@@ -14,6 +14,10 @@
   )
 
   await getProject(route.params.slug as string)
+
+  const { getProfilesByIds } = useCollabs()
+
+  const collabs = await getProfilesByIds(project.value?.collaborators || [])
 </script>
 
 <template>
@@ -27,7 +31,7 @@
     <TableRow>
       <TableHead> Description </TableHead>
       <TableCell>
-        <AppInPlaceEditText
+        <AppInPlaceEditTextArea
           v-model="project.description"
           @commit="updateProject"
         />
@@ -45,14 +49,17 @@
         <div class="flex">
           <Avatar
             class="-mr-4 border border-primary hover:scale-110 transition-transform"
-            v-for="collab in project?.collaborators"
-            :key="collab"
+            v-for="collab in collabs"
+            :key="collab.id"
           >
             <RouterLink
               class="w-full h-full flex items-center justify-center"
-              to=""
+              :to="{
+                name: '/users/[username]',
+                params: { username: collab.username }
+              }"
             >
-              <AvatarImage src="" alt="" />
+              <AvatarImage :src="collab.avatar_url || ''" alt="" />
               <AvatarFallback> </AvatarFallback>
             </RouterLink>
           </Avatar>
@@ -78,8 +85,17 @@
           </TableHeader>
           <TableBody>
             <TableRow v-for="task in project?.tasks" :key="task.id">
-              <TableCell> {{ task.name }} </TableCell>
-              <TableCell> {{ task.status }} </TableCell>
+              <TableCell class="p-0">
+                <RouterLink
+                  class="text-left font-medium hover:bg-muted block w-full p-4"
+                  :to="{ name: '/tasks/[id]', params: { id: task.id } }"
+                >
+                  {{ task.name }}
+                </RouterLink>
+              </TableCell>
+              <TableCell>
+                <AppInPlaceStatus readOnly :modelValue="task.status" />
+              </TableCell>
               <TableCell> {{ task.due_date }} </TableCell>
             </TableRow>
           </TableBody>

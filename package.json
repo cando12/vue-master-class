@@ -13,14 +13,14 @@
     "format": "prettier --write src/",
     "supabase:init": "supabase init",
     "supabase:login": "supabase login",
-    "supabase:link": "supabase link --project-ref bevxkvwovotojhbsmrss",
+    "supabase:link": "supabase link --project-ref dnexvusawboaowsothtz",
     "db:migrate:new": "supabase migration new",
     "db:reset": "npx supabase@beta db reset --linked",
     "db:seed": "node --env-file=.env database/seed.js",
-    "supabase:types": "npx supabase gen types typescript --project-id bevxkvwovotojhbsmrss --schema public > database/types.ts"
+    "supabase:types": "npx supabase gen types typescript --project-id dnexvusawboaowsothtz --schema public > database/types.ts"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.49.4",
+    "@supabase/supabase-js": "^2.90.1",
     "@tailwindcss/vite": "^4.1.7",
     "@tanstack/vue-table": "^8.21.3",
     "@vueuse/core": "^13.5.0",
@@ -50,7 +50,7 @@
     "jiti": "^2.4.2",
     "npm-run-all2": "^7.0.2",
     "prettier": "3.5.3",
-    "supabase": "^2.22.12",
+    "supabase": "^2.72.4",
     "typescript": "~5.8.0",
     "unplugin-auto-import": "^19.2.0",
     "unplugin-vue-components": "^28.5.0",

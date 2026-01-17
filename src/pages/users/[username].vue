@@ -22,6 +22,8 @@
 
   const { username } = useRoute('/users/[username]').params
 
+  usePageStore().pageData.title = ''
+
   const profile = ref<Tables<'profiles'> | null>(null)
 
   const getTask = async () => {
