@@ -15,6 +15,7 @@ export const useProjectsStore = defineStore('projects-store', () => {
     loaderFn: typeof loadProjects | typeof loadProject
   }
 
+  // This function checks if the cached data is still valid by comparing it with the latest data from the database. If the data has changed, it updates the cache and the corresponding ref.
   const validateCache = ({
     ref,
     query,
