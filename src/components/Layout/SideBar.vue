@@ -44,6 +44,8 @@
       }
     }
   }
+
+  const emit = defineEmits(['taskClicked'])
 </script>
 
 <template>
@@ -57,9 +59,23 @@
         <iconify-icon icon="lucide:menu"></iconify-icon>
       </Button>
 
-      <Button variant="outline" size="icon" class="w-8 h-8">
-        <iconify-icon icon="lucide:plus"></iconify-icon>
-      </Button>
+      <DropdownMenu>
+        <DropdownMenuTrigger>
+          <Button variant="outline" size="icon" class="w-8 h-8">
+            <iconify-icon icon="lucide:plus"></iconify-icon>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem @click="$emit('taskClicked')">
+            <iconify-icon icon="lucide:plus"></iconify-icon>
+            New Project
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <iconify-icon icon="lucide:plus"></iconify-icon>
+            New Task
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
 
     <nav class="flex flex-col gap-2 justify-between h-full relative">

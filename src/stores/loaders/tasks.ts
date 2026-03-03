@@ -1,4 +1,5 @@
 import {
+  deleteTaskQuery,
   taskQuery,
   tasksWithProjectsQuery,
   updateTaskQuery,
@@ -14,7 +15,7 @@ export const useTasksStore = defineStore('tasks-store', () => {
   const loadTasks = useMemoize(
     async (key: string) => await tasksWithProjectsQuery
   )
-  const loadTask = useMemoize(async (id: number) => await taskQuery(id))
+  const loadTask = useMemoize(async (slug: number) => await taskQuery(slug))
 
   interface ValidateCacheProps {
     ref: typeof tasks | typeof task
@@ -54,9 +55,9 @@ export const useTasksStore = defineStore('tasks-store', () => {
     })
   }
 
-  const getTask = async (id: number) => {
+  const getTask = async (id: string) => {
     task.value = null
-    const { data, error, status } = await loadTask(id)
+    const { data, error, status } = await loadTask(Number(id))
     if (error)
       useErrorStore().setError({ error: error.message, customCode: status })
     else task.value = data
@@ -68,14 +69,19 @@ export const useTasksStore = defineStore('tasks-store', () => {
     })
   }
 
-  const updateTask = async (updatedTask: Partial<Task>, id: number) => {
-    const { error, status } = await updateTaskQuery(updatedTask, id)
-    if (error) {
-      useErrorStore().setError({ error: error.message, customCode: status })
-    } else {
-      loadTask.delete(id)
-      getTask(id)
-    }
+  const updateTask = async () => {
+    if (!task.value) return
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { projects, id, ...taskProperties } = task.value
+
+    await updateTaskQuery(taskProperties, task.value.id)
+  }
+
+  const deleteTask = async () => {
+    if (!task.value) return
+
+    await deleteTaskQuery(task.value.id)
   }
 
   return {
@@ -83,6 +89,7 @@ export const useTasksStore = defineStore('tasks-store', () => {
     task,
     getTasks,
     getTask,
-    updateTask
+    updateTask,
+    deleteTask
   }
 })
