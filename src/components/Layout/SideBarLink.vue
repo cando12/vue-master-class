@@ -11,6 +11,8 @@
   defineEmits<{
     actionClicked: [string]
   }>()
+
+  const { menuOpen } = useMenu()
 </script>
 
 <template>
@@ -20,18 +22,28 @@
       exactActiveClass="text-primary bg-muted"
       :to="link.to"
       class="nav-link"
+      :class="{ 'justify-normal': menuOpen, 'justify-center': !menuOpen }"
     >
       <iconify-icon :icon="link.icon"></iconify-icon>
-      <span class="hidden lg:block text-nowrap">{{ link.title }}</span>
+      <span
+        class="text-nowrap"
+        :class="{ bloc: menuOpen, hidden: !menuOpen }"
+        >{{ link.title }}</span
+      >
     </RouterLink>
 
     <div
       v-else
       class="nav-link cursor-pointer"
+      :class="{ 'justify-normal': menuOpen, 'justify-center': !menuOpen }"
       @click="$emit('actionClicked', link.title)"
     >
       <iconify-icon :icon="link.icon"></iconify-icon>
-      <span class="hidden lg:block text-nowrap">{{ link.title }}</span>
+      <span
+        class="text-nowrap"
+        :class="{ bloc: menuOpen, hidden: !menuOpen }"
+        >{{ link.title }}</span
+      >
     </div>
   </template>
 </template>
@@ -40,7 +52,6 @@
   .nav-link {
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 0.75rem;
     padding: 0.5rem 1rem;
     margin: 0 0.5rem;
